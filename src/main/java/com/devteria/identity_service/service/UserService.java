@@ -2,6 +2,8 @@ package com.devteria.identity_service.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.devteria.identity_service.dto.request.UserCreatedRequest;
@@ -21,13 +23,18 @@ public class UserService {
 	UserRepository useRepository;
 	UserMapper userMapper;
 
-	public User createdUser(UserCreatedRequest request) {
+	public UserResponse createdUser(UserCreatedRequest request) {
 		if (useRepository.existsByUsername(request.getUsername()))
 			throw new RuntimeException("User existed");
 
 		User user = userMapper.toUser(request);
-		return useRepository.save(user);
+		System.out.println("Request received: " + request);
 
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+		user = useRepository.save(user);
+		return userMapper.toUserResponse(user);
 	}
 
 	public List<User> getUsers() {

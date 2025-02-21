@@ -1,12 +1,12 @@
 package com.devteria.identity_service.dto.request;
 
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -19,5 +19,5 @@ public class UserCreatedRequest {
 	private String password;
 	private String firstname;
 	private String lastname;
-	private LocalDate birthday;
+	private LocalDate birthday;  // 🚨 Kiểm tra có đúng không?
 }

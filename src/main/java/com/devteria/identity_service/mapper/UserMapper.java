@@ -10,8 +10,6 @@ import com.devteria.identity_service.entity.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 	User toUser(UserCreatedRequest request);
-
 	UserResponse toUserResponse(User user);
-
 	void updateUser(@MappingTarget User user, UserCreatedRequest request);
 }

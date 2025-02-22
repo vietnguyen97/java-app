@@ -1,7 +1,9 @@
 package com.devteria.identity_service.service;
 
+import java.util.HashSet;
 import java.util.List;
 
+import com.devteria.identity_service.enums.Role;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import lombok.experimental.FieldDefaults;
 public class UserService {
 	UserRepository useRepository;
 	UserMapper userMapper;
+	PasswordEncoder passwordEncoder;
 
 	public UserResponse createdUser(UserCreatedRequest request) {
 		if (useRepository.existsByUsername(request.getUsername()))
@@ -30,7 +33,9 @@ public class UserService {
 		User user = userMapper.toUser(request);
 		System.out.println("Request received: " + request);
 
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+		HashSet<String> roles = new HashSet<>();
+		roles.add(Role.USER.name());
+		user.setRoles(roles);
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 
 		user = useRepository.save(user);

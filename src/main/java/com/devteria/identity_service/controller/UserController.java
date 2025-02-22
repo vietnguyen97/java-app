@@ -2,7 +2,9 @@ package com.devteria.identity_service.controller;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import com.devteria.identity_service.service.UserService;
 
 import jakarta.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {

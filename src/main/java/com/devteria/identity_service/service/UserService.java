@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.devteria.identity_service.enums.Role;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,10 +45,12 @@ public class UserService {
 		return userMapper.toUserResponse(user);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	public List<User> getUsers() {
 		return useRepository.findAll();
 	}
 
+	@PostAuthorize("returnObject.username == authentication.name")
 	public UserResponse getUser(String id) {
 		return userMapper
 				.toUserResponse(useRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found")));
@@ -56,6 +61,14 @@ public class UserService {
 
 		userMapper.updateUser(user, request);
 		return userMapper.toUserResponse(useRepository.save(user));
+	}
+
+	public UserResponse getMyInfo() {
+		var context = SecurityContextHolder.getContext();
+		var name = context.getAuthentication().getName();
+		return useRepository.findByUsername(name)
+				.map(userMapper::toUserResponse)
+				.orElseThrow(() -> new RuntimeException("User not found"));
 	}
 
 	public void deleteUser(String userId) {

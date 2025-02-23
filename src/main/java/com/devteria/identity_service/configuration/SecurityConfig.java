@@ -1,6 +1,5 @@
 package com.devteria.identity_service.configuration;
 
-import com.devteria.identity_service.enums.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +32,10 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(rq ->
                 rq.requestMatchers(HttpMethod.POST, PUBLIC_URLS).permitAll()
                         .anyRequest().authenticated());
+
+        // Thêm handler xử lý lỗi 401 và 403
+        httpSecurity.exceptionHandling(exception ->
+                exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
 
         httpSecurity.oauth2ResourceServer(auth2 ->
                 auth2.jwt(jwtConf ->

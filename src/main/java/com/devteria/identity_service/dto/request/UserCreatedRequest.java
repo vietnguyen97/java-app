@@ -19,5 +19,5 @@ public class UserCreatedRequest {
 	private String password;
 	private String firstname;
 	private String lastname;
-	private LocalDate birthday;  // 🚨 Kiểm tra có đúng không?
+	private LocalDate birthday;
 }

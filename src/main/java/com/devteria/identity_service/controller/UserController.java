@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,29 +26,23 @@ import jakarta.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends AbstractResource {
 	@Autowired
 	private UserService useService;
 
 	@PostMapping
-	public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreatedRequest request) {
-		ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-		apiResponse.setData(useService.createdUser(request));
-		return apiResponse;
+	public ApiResponse createUser(@RequestBody @Valid UserCreatedRequest request) {
+		return buildResponse(useService.createdUser(request));
 	}
 
 	@GetMapping
-	public ApiResponse<List<User>> getUsers() {
-		ApiResponse<List<User>> apiResponse = new ApiResponse<>();
-		apiResponse.setData(useService.getUsers());
-		return apiResponse;
+	public ApiResponse getUsers() {
+		return buildResponse(useService.getUsers());
 	}
 
 	@GetMapping("/{userId}")
-	public ApiResponse<UserResponse> getOneUser(@PathVariable("userId") String userId) {
-		ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-		apiResponse.setData(useService.getUser(userId));
-		return apiResponse;
+	public ApiResponse getOneUser(@PathVariable("userId") String userId) {
+		return buildResponse(useService.getUser(userId));
 	}
 
 	@PutMapping("/{userId}")
@@ -57,9 +52,7 @@ public class UserController {
 
 	@GetMapping("/my-info")
 	public ApiResponse<UserResponse> getMyInfo() {
-		ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-		apiResponse.setData(useService.getMyInfo());
-		return apiResponse;
+		return buildResponse(useService.getMyInfo());
 	}
 
 	@DeleteMapping("/{userId}")

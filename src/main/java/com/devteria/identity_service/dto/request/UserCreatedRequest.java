@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +21,5 @@ public class UserCreatedRequest {
 	private String firstname;
 	private String lastname;
 	private LocalDate birthday;
+	List<String> roles;
 }

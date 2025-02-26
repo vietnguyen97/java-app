@@ -34,8 +34,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated());
 
         // Thêm handler xử lý lỗi 401 và 403
-        httpSecurity.exceptionHandling(exception ->
-                exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
+//        httpSecurity.exceptionHandling(exception ->
+//                exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
 
         httpSecurity.oauth2ResourceServer(auth2 ->
                 auth2.jwt(jwtConf ->
@@ -50,7 +50,7 @@ public class SecurityConfig {
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;

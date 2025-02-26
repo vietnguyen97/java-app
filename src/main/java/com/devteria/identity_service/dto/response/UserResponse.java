@@ -2,7 +2,6 @@ package com.devteria.identity_service.dto.response;
 
 import java.time.LocalDate;
 import java.util.Set;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +20,5 @@ public class UserResponse {
 	String firstname;
 	String lastname;
 	LocalDate birthday;
-	Set<String> roles;
+	Set<RoleResponse> roles;
 }

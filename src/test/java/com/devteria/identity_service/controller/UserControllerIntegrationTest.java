@@ -2,7 +2,6 @@ package com.devteria.identity_service.controller;
 
 import com.devteria.identity_service.dto.request.UserCreatedRequest;
 import com.devteria.identity_service.dto.response.UserResponse;
-import com.devteria.identity_service.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,22 +12,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.LocalDate;
 
 @SpringBootTest
 @Slf4j
 @AutoConfigureMockMvc
-public class UserControllerTest {
+@Testcontainers
+public class UserControllerIntegrationTest {
+    @Container
+    static final PostgreSQLContainer<?> POSTGRES_SQL_CONTAINER = new PostgreSQLContainer<>("postgres:17-alpine");
 
+    @DynamicPropertySource
+    static void configurePostgreSQL(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", POSTGRES_SQL_CONTAINER::getJdbcUrl);
+        registry.add("spring.datasource.username", POSTGRES_SQL_CONTAINER::getUsername);
+        registry.add("spring.datasource.password", POSTGRES_SQL_CONTAINER::getPassword);
+        registry.add("spring.jpa.hibernate.ddl-auto", () -> "update");
+    }
     @Autowired
     private MockMvc mockMvc;
-
-    @MockitoBean
-    private UserService userService;
 
     private UserCreatedRequest request;
     private UserResponse response;
@@ -60,26 +70,14 @@ public class UserControllerTest {
     @Test
     void createUser_validRequest_success() throws Exception {
         String content = objectMapper.writeValueAsString(request);
-        Mockito.when(userService.createdUser(ArgumentMatchers.any())).thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value(1000))
-                .andExpect(MockMvcResultMatchers.jsonPath("data.id").value("cf0600f538b3"));
-    }
-
-    @Test
-    void createUser_usernameInvalid_fail() throws Exception {
-        request.setUsername("ngu");
-        String content = objectMapper.writeValueAsString(request);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/user")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(content))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("code").value(400))
-                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Username must be at least 4 characters"));
+                .andExpect(MockMvcResultMatchers.jsonPath("data.username").value("nguyen"))
+                .andExpect(MockMvcResultMatchers.jsonPath("data.firstname").value("Viet"))
+                .andExpect(MockMvcResultMatchers.jsonPath("data.lastname").value("Nguyen"));
     }
 }

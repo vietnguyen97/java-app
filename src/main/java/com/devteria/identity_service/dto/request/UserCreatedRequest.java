@@ -1,5 +1,6 @@
 package com.devteria.identity_service.dto.request;
 
+import com.devteria.identity_service.validator.BirthConstraints;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,12 +15,16 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class UserCreatedRequest {
-	private String username;
+	@Size(min = 4, message = "USERNAME_INVALID")
+	String username;
 
 	@Size(min = 8, message = "Password must be at least 8 characters")
 	private String password;
 	private String firstname;
 	private String lastname;
+
+	@BirthConstraints(min = 18, message = "INVALID_DOB")
 	private LocalDate birthday;
+
 	List<String> roles;
 }

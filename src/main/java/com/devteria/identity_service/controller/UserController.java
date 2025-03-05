@@ -46,12 +46,12 @@ public class UserController extends AbstractResource {
 	}
 
 	@PutMapping("/{userId}")
-	public UserResponse updateUser(@PathVariable("userId") String userId, @RequestBody UserCreatedRequest request) {
-		return useService.updateUser(userId, request);
+	public ApiResponse updateUser(@PathVariable("userId") String userId, @RequestBody UserCreatedRequest request) {
+		return buildResponse(useService.updateUser(userId, request));
 	}
 
 	@GetMapping("/my-info")
-	public ApiResponse<UserResponse> getMyInfo() {
+	public ApiResponse getMyInfo() {
 		return buildResponse(useService.getMyInfo());
 	}
 

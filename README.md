@@ -14,6 +14,7 @@
 - Bcrypt password
 - JWT and Authentication with JWT
 - Authorization
+- Testing
 
 ## Tech Stack
 

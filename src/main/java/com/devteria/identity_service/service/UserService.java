@@ -3,7 +3,6 @@ package com.devteria.identity_service.service;
 import java.util.HashSet;
 import java.util.List;
 import com.devteria.identity_service.enums.Role;
-import com.devteria.identity_service.exception.AppException;
 import com.devteria.identity_service.repository.RoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;

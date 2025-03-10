@@ -5,15 +5,15 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: root
+    url: ${DBMS_CONNECTION}
+    username: ${DBMS_USERNAME}
+    password: ${DBMS_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
 
 jwt:
-  signerKey: "MH6XaEf51MJBLZXwGglkMQDVfSArLgBw3Jj5L/VTnIhFfURT420DApXKd5ceN28D"
+  signerKey: ${JWT_SIGNERKEY}
   valid-duration: 60
   refreshable-duration: 120

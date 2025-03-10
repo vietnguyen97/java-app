@@ -1,0 +1,4 @@
+jwt:
+  signerKey: "x9jP3OdAO2D3zg00nj6TjbysH2V5JAx/WKifAGqCFY6N2+d60Kp2/vyAEvcBl0DP"
+  valid-duration: 120
+  refreshable-duration: 240
